@@ -1,0 +1,20 @@
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             version="3.0">
+
+    <persistence-unit name="university-pu" transaction-type="JTA">
+        <jta-data-source>java:/university-db</jta-data-source>
+
+        <class>lt.vu.mif.entities.Student</class>
+        <class>lt.vu.mif.entities.Course</class>
+        <class>lt.vu.mif.entities.Enrollment</class>
+
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.connection.charSet" value="UTF-8"/>
+            <property name="hibernate.show_sql" value="true"/>
+        </properties>
+
+    </persistence-unit>
+
+</persistence>

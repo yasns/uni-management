@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+<ui:composition template="/WEB-INF/templates/main.xhtml">
+
+    <ui:define name="title">
+        Student ##{enrollmentBean.student.id} | Enrollment
+    </ui:define>
+
+    <ui:define name="content">
+        <h:link value="Back" outcome="/index"/>
+        <h1>
+            <span class="text-secondary">Enrollment |</span>
+            ##{enrollmentBean.student.id}
+        </h1>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Details</h5>
+                <div><strong class="text-secondary">Student ID:</strong> #{enrollmentBean.student.id}</div>
+                <div><strong class="text-secondary">First Name:</strong> #{enrollmentBean.student.firstName}</div>
+                <div><strong class="text-secondary">Last Name:</strong> #{enrollmentBean.student.lastName}</div>
+                <div><strong class="text-secondary">Email:</strong> #{enrollmentBean.student.email}</div>
+            </div>
+        </div>
+
+        <h:form>
+            <h:dataTable value="#{enrollmentBean.enrollments}" var="enrollment" styleClass="table table-hover">
+                <h:column>
+                    <f:facet name="header">Course</f:facet>
+                    #{empty enrollment.course.code ? '' : enrollment.course.code.concat(' | ')}#{enrollment.course.title}
+                    <f:facet name="footer">
+                        <h:selectOneMenu id="course" value="#{enrollmentBean.selectedCourseId}"
+                                         styleClass="form-control #{component.valid ? '' : 'is-invalid'}"
+                                         required="true">
+
+                            <f:selectItem itemLabel="Select course*" itemValue="#{null}" noSelectionOption="true"/>
+
+                            <f:selectItems value="#{enrollmentBean.courses}" var="course" itemValue="#{course.id}"
+                                           itemLabel="#{empty course.code ? '' : course.code.concat(' | ')}#{course.title}"/>
+                        </h:selectOneMenu>
+                        <div class="invalid-feedback"><h:message for="course"/></div>
+                    </f:facet>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Grade</f:facet>
+                    #{enrollment.grade}
+                    <f:facet name="footer">
+                        <h:selectOneMenu id="grade"
+                                         value="#{enrollmentBean.enrollmentToCreate.grade}"
+                                         styleClass="form-select #{component.valid ? '' : 'is-invalid'}">
+
+                            <f:selectItem itemLabel="Select grade" itemValue="#{null}" noSelectionOption="true"/>
+
+                            <f:selectItem itemLabel="1" itemValue="1"/>
+                            <f:selectItem itemLabel="2" itemValue="2"/>
+                            <f:selectItem itemLabel="3" itemValue="3"/>
+                            <f:selectItem itemLabel="4" itemValue="4"/>
+                            <f:selectItem itemLabel="5" itemValue="5"/>
+                            <f:selectItem itemLabel="6" itemValue="6"/>
+                            <f:selectItem itemLabel="7" itemValue="7"/>
+                            <f:selectItem itemLabel="8" itemValue="8"/>
+                            <f:selectItem itemLabel="9" itemValue="9"/>
+                            <f:selectItem itemLabel="10" itemValue="10"/>
+
+                        </h:selectOneMenu>
+                        <div class="invalid-feedback"><h:message for="grade"/></div>
+                    </f:facet>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Actions</f:facet>
+                    <h:commandButton value="Delete" actionListener="#{enrollmentBean.deleteEnrollment(enrollment)}"
+                                     action="#{'/enrollment?faces-redirect=true&amp;studentId='.concat(enrollmentBean.student.id)}"
+                                     styleClass="btn btn-outline-danger" immediate="true">
+                        <f:param name="studentId" value="#{enrollmentBean.student.id}"/>
+                    </h:commandButton>
+                    <f:facet name="footer">
+                        <h:commandButton value="Add" actionListener="#{enrollmentBean.createEnrollment}"
+                                         action="#{'/enrollment?faces-redirect=true&amp;studentId='.concat(enrollmentBean.student.id)}"
+                                         styleClass="btn btn-primary">
+                            <f:param name="faces-redirect" value="true"/>
+                            <f:param name="studentId" value="#{enrollmentBean.student.id}"/>
+                        </h:commandButton>
+                    </f:facet>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+>
+<ui:composition template="/WEB-INF/templates/main.xhtml">
+
+    <ui:define name="title">
+        Courses
+    </ui:define>
+
+    <ui:define name="content">
+        <h1>Courses</h1>
+
+        <h:form>
+            <h:dataTable value="#{courseBean.courses}" var="course" styleClass="table table-hover">
+                <h:column>
+                    <f:facet name="header">Code</f:facet>
+                    #{course.code}
+                    <f:facet name="footer">
+                        <h:inputText id="code" value="#{courseBean.courseToCreate.code}" pt:placeholder="Code"
+                                     styleClass="form-control #{component.valid ? '' : 'is-invalid'}"/>
+                        <div class="invalid-feedback"><h:message for="code"/></div>
+                    </f:facet>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Title</f:facet>
+                    #{course.title}
+                    <f:facet name="footer">
+                        <h:inputText id="title" value="#{courseBean.courseToCreate.title}" pt:placeholder="Title*"
+                                     styleClass="form-control #{component.valid ? '' : 'is-invalid'}" required="true"/>
+                        <div class="invalid-feedback"><h:message for="title"/></div>
+                    </f:facet>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Credits</f:facet>
+                    #{course.credits}
+                    <f:facet name="footer">
+                        <h:inputText id="credits" value="#{courseBean.courseToCreate.credits}" type="number"
+                                     pt:placeholder="Credits*"
+                                     styleClass="form-control #{component.valid ? '' : 'is-invalid'}"/>
+                        <div class="invalid-feedback"><h:message for="credits"/></div>
+                    </f:facet>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Actions</f:facet>
+                    <h:commandButton value="Delete" actionListener="#{courseBean.deleteCourse(course)}"
+                                     action="/courses?faces-redirect=true" styleClass="btn btn-outline-danger"
+                                     immediate="true"/>
+                    <f:facet name="footer">
+                        <h:commandButton value="Add" actionListener="#{courseBean.createCourse}"
+                                         action="/courses?faces-redirect=true" styleClass="btn btn-primary"/>
+                    </f:facet>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+</html>
