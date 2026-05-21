@@ -3,6 +3,7 @@ package lt.vu.mif.beans;
 import lombok.Getter;
 import lombok.Setter;
 import lt.vu.mif.entities.Course;
+import lt.vu.mif.entities.Student;
 import lt.vu.mif.persistence.CourseDao;
 
 import javax.annotation.PostConstruct;
@@ -28,10 +29,12 @@ public class CourseBean {
         this.courses = courseDao.listAll();
     }
 
+    @Transactional
     public void createCourse() {
         this.courseDao.persist(courseToCreate);
     }
 
+    @Transactional
     public void deleteCourse(Course course) {
         this.courseDao.delete(course);
     }

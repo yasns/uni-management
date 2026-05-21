@@ -14,7 +14,6 @@ public class CourseDao {
     @Inject
     private EntityManager em;
 
-    @Transactional
     public void persist(Course course) {
         this.em.persist(course);
     }
@@ -27,12 +26,10 @@ public class CourseDao {
         return em.find(Course.class, id);
     }
 
-    @Transactional
     public Course update(Course course) {
         return em.merge(course);
     }
 
-    @Transactional
     public void delete(Course course) {
         em.remove(course);
     }

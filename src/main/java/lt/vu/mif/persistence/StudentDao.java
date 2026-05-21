@@ -13,7 +13,6 @@ public class StudentDao {
     @Inject
     private EntityManager em;
 
-    @Transactional
     public void persist(Student student) {
         this.em.persist(student);
     }
@@ -30,12 +29,10 @@ public class StudentDao {
         return em.createNamedQuery("Student.findByName", Student.class).setParameter("name", "%" + name.toLowerCase() + "%").getResultList();
     }
 
-    @Transactional
     public Student update(Student student) {
         return em.merge(student);
     }
 
-    @Transactional
     public void delete(Student student) {
         em.remove(student);
     }

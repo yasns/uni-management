@@ -53,10 +53,12 @@ public class EnrollmentBean {
         courses = courseDao.listNotEnrolledByStudent(student);
     }
 
+    @Transactional
     public void deleteEnrollment(Enrollment enrollment) {
         enrollmentDao.delete(enrollment);
     }
 
+    @Transactional
     public void createEnrollment() {
         Course course = courseDao.findById(selectedCourseId);
 
