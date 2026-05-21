@@ -34,7 +34,7 @@
                 </h:column>
                 <h:column>
                     <f:facet name="header">Grade</f:facet>
-                    <h:selectOneMenu value="#{enrollment.grade}" styleClass="form-select">
+                    <h:selectOneMenu value="#{enrollment.grade}" styleClass="form-select grade-select">
                         <f:selectItem itemLabel="Select grade" itemValue="#{null}" noSelectionOption="true"/>
                         <f:selectItem itemLabel="1" itemValue="1"/>
                         <f:selectItem itemLabel="2" itemValue="2"/>
@@ -52,7 +52,7 @@
                     <f:facet name="header">Actions</f:facet>
                     <h:commandButton value="Save"
                                      action="#{enrollmentBean.updateGrade(enrollment)}"
-                                     styleClass="btn btn-success me-1">
+                                     styleClass="btn btn-success me-1 save-grade-btn">
                         <f:param name="studentId" value="#{enrollmentBean.student.id}"/>
                     </h:commandButton>
                     <h:commandButton value="Delete" actionListener="#{enrollmentBean.deleteEnrollment(enrollment)}"
@@ -104,6 +104,45 @@
                 </h:commandButton>
             </div>
         </h:form>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('.grade-select').forEach(function (select) {
+                    var btn = select.closest('tr').querySelector('.save-grade-btn');
+                    btn.disabled = true;
+                    select.dataset.original = select.value;
+                    select.addEventListener('change', function () {
+                        btn.disabled = select.value === select.dataset.original;
+                    });
+                });
+            });
+        </script>
+
+        <h:panelGroup rendered="#{enrollmentBean.optimisticLockConflict}">
+            <div class="modal fade" id="optimisticLockModal" tabindex="-1" aria-labelledby="optimisticLockModalLabel">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="optimisticLockModalLabel">Update Conflict</h5>
+                        </div>
+                        <div class="modal-body">
+                            This record was modified by someone else. What would you like to do?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Try Again</button>
+                            <h:link value="View Latest" outcome="/enrollment" styleClass="btn btn-primary">
+                                <f:param name="studentId" value="#{enrollmentBean.student.id}"/>
+                            </h:link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    new bootstrap.Modal(document.getElementById('optimisticLockModal'), {backdrop: 'static'}).show();
+                });
+            </script>
+        </h:panelGroup>
     </ui:define>
 
 </ui:composition>

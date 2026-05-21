@@ -2,7 +2,6 @@ package lt.vu.mif.beans;
 
 import lombok.Getter;
 import lombok.Setter;
-import lt.vu.mif.beans.AlertBean.Type;
 import lt.vu.mif.entities.Course;
 import lt.vu.mif.entities.Enrollment;
 import lt.vu.mif.entities.Student;
@@ -16,6 +15,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.OptimisticLockException;
 import javax.transaction.Transactional;
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +31,6 @@ public class EnrollmentBean {
     @Inject
     private CourseDao courseDao;
 
-    @Inject
-    private AlertBean alertBean;
-
     @Getter
     private Student student;
 
@@ -44,6 +41,8 @@ public class EnrollmentBean {
     private List<Course> courses = new ArrayList<>();
     @Getter @Setter
     private Integer selectedCourseId = -1;
+    @Getter
+    private boolean optimisticLockConflict = false;
     @Getter @Setter
     private Enrollment enrollmentToCreate = new Enrollment();
 
@@ -65,13 +64,12 @@ public class EnrollmentBean {
     public String updateGrade(Enrollment enrollment) {
         try {
             enrollmentDao.update(enrollment);
-            alertBean.add(Type.SUCCESS, "Grade updated successfully.");
             return "/enrollment?faces-redirect=true&studentId=" + student.getId();
         } catch (OptimisticLockException e) {
-            alertBean.add(Type.DANGER, "Record was modified concurrently. Current data is shown — please review and save again.");
-            return "/enrollment?faces-redirect=true&studentId=" + student.getId();
+            optimisticLockConflict = true;
+            return null;
         } catch (InterruptedException e) {
-            alertBean.add(Type.DANGER, "Update was interrupted. Please try again.");
+            System.err.println("Update was interrupted.");
             return null;
         }
     }
@@ -84,7 +82,6 @@ public class EnrollmentBean {
         enrollmentToCreate.setStudent(student);
 
         enrollmentDao.persist(enrollmentToCreate);
-        alertBean.add(Type.SUCCESS, "Student enrolled successfully.");
     }
 
 }
