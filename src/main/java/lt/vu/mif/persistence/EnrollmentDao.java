@@ -6,6 +6,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.OptimisticLockException;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @ApplicationScoped
@@ -25,6 +26,7 @@ public class EnrollmentDao {
         em.remove(enrollment);
     }
 
+    @Transactional
     public void update(Enrollment enrollment) throws InterruptedException {
         Thread.sleep(5000);
 

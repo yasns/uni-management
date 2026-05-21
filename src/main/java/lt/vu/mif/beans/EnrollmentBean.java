@@ -62,7 +62,6 @@ public class EnrollmentBean {
         enrollmentDao.delete(enrollment);
     }
 
-    @Transactional
     public String updateGrade(Enrollment enrollment) {
         try {
             enrollmentDao.update(enrollment);
