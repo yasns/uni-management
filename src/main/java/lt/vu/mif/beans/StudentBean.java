@@ -31,12 +31,10 @@ public class StudentBean {
         this.students = studentDao.listAll();
     }
 
-    @Transactional
     public void createStudent() {
         this.studentDao.persist(studentToCreate);
     }
 
-    @Transactional
     public void deleteStudent(Student student) {
         this.studentDao.delete(student);
     }

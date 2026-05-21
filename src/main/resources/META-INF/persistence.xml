@@ -1,8 +1,8 @@
-<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
-             version="3.0">
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             version="2.2">
 
     <persistence-unit name="university-pu" transaction-type="JTA">
-        <jta-data-source>java:/university-db</jta-data-source>
+        <jta-data-source>university-ds</jta-data-source>
 
         <class>lt.vu.mif.entities.Student</class>
         <class>lt.vu.mif.entities.Course</class>

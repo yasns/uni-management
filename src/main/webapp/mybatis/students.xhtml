@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+>
+<ui:composition template="/WEB-INF/templates/mybatis.xhtml">
+
+    <ui:define name="title">
+        Students
+    </ui:define>
+
+    <ui:define name="content">
+        <h1>Students</h1>
+        <h:form>
+            <div class="input-group has-validation mb-3" style="max-width:300px">
+                <h:inputText value="#{studentBeanMyBatis.searchTerm}" pt:placeholder="Name"
+                             styleClass="form-control #{component.valid ? '' : 'is-invalid'}"
+                             id="search" required="true"/>
+                <h:commandButton value="Search" action="#{studentBeanMyBatis.searchStudents}"
+                                 styleClass="btn btn-secondary"/>
+                <div class="invalid-feedback"><h:message for="search"/></div>
+            </div>
+        </h:form>
+        <h:form>
+            <h:dataTable value="#{studentBeanMyBatis.allStudents}" var="student" styleClass="table table-hover">
+                <h:column>
+                    <f:facet name="header">Student ID</f:facet>
+                    #{student.id}
+                    <f:facet name="footer"> </f:facet>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">First Name</f:facet>
+                    #{student.firstname}
+                    <f:facet name="footer">
+                        <h:inputText id="firstName" value="#{studentBeanMyBatis.studentToCreate.firstname}"
+                                     pt:placeholder="First Name*"
+                                     styleClass="form-control #{component.valid ? '' : 'is-invalid'}" required="true"/>
+                        <div class="invalid-feedback"><h:message for="firstName"/></div>
+                    </f:facet>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Last Name</f:facet>
+                    #{student.lastname}
+                    <f:facet name="footer">
+                        <h:inputText id="lastName" value="#{studentBeanMyBatis.studentToCreate.lastname}"
+                                     pt:placeholder="Last Name*"
+                                     styleClass="form-control #{component.valid ? '' : 'is-invalid'}" required="true"/>
+                        <div class="invalid-feedback"><h:message for="lastName"/></div>
+                    </f:facet>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Email</f:facet>
+                    <a href="mailto:#{student.email}">#{student.email}</a>
+                    <f:facet name="footer">
+                        <h:inputText id="email" value="#{studentBeanMyBatis.studentToCreate.email}"
+                                     pt:placeholder="Email"
+                                     styleClass="form-control #{component.valid ? '' : 'is-invalid'}"/>
+                        <div class="invalid-feedback"><h:message for="email"/></div>
+                    </f:facet>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Grade Avg.</f:facet>
+                    #{studentBeanMyBatis.getAvg(student)}
+                    <f:facet name="footer"> </f:facet>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Actions</f:facet>
+
+                    <!--                    <h:button value="Enrollment" outcome="/mybatis/enrollment.xhtml?studentId=#{student.id}" styleClass="btn btn-outline-primary me-2" />-->
+                    <h:commandButton value="Delete" actionListener="#{studentBeanMyBatis.deleteStudent(student)}"
+                                     action="/mybatis/students.xhtml?faces-redirect=true"
+                                     styleClass="btn btn-outline-danger"
+                                     immediate="true"/>
+
+                    <f:facet name="footer">
+                        <h:commandButton value="Add" action="#{studentBeanMyBatis.createStudent}"
+                                         styleClass="btn btn-primary"/>
+                    </f:facet>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+</html>

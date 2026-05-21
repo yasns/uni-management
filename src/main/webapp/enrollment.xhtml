@@ -8,14 +8,14 @@
 <ui:composition template="/WEB-INF/templates/main.xhtml">
 
     <ui:define name="title">
-        Student ##{enrollmentBean.student.id} | Enrollment
+        #{enrollmentBean.student.firstName} #{enrollmentBean.student.lastName} | Enrollment
     </ui:define>
 
     <ui:define name="content">
         <h:link value="Back" outcome="/index"/>
         <h1>
             <span class="text-secondary">Enrollment |</span>
-            ##{enrollmentBean.student.id}
+            #{enrollmentBean.student.firstName} #{enrollmentBean.student.lastName}
         </h1>
 
         <div class="card mb-4">
@@ -24,7 +24,8 @@
                 <div><strong class="text-secondary">Student ID:</strong> #{enrollmentBean.student.id}</div>
                 <div><strong class="text-secondary">First Name:</strong> #{enrollmentBean.student.firstName}</div>
                 <div><strong class="text-secondary">Last Name:</strong> #{enrollmentBean.student.lastName}</div>
-                <div><strong class="text-secondary">Email:</strong> #{enrollmentBean.student.email}</div>
+                <div><strong class="text-secondary">Email:</strong> <a
+                        href="mailto:#{enrollmentBean.student.email}">#{enrollmentBean.student.email}</a></div>
             </div>
         </div>
 

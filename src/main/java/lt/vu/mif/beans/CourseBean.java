@@ -28,13 +28,12 @@ public class CourseBean {
         this.courses = courseDao.listAll();
     }
 
-    @Transactional
     public void createCourse() {
         this.courseDao.persist(courseToCreate);
     }
 
-    @Transactional
     public void deleteCourse(Course course) {
         this.courseDao.delete(course);
     }
+
 }

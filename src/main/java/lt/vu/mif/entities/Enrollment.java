@@ -15,6 +15,7 @@ import javax.validation.constraints.Min;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"student", "course"})
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "student_id", "course_id" }) })
 public class Enrollment {
 
     @Id

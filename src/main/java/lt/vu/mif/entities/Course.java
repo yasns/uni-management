@@ -13,7 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@NamedQueries({@NamedQuery(name = "Course.listAll", query = "select c from Course as c")})
+@NamedQueries({
+        @NamedQuery(name = "Course.listAll", query = "select c from Course as c"),
+        @NamedQuery(name = "Course.listNotEnrolledByStudent", query = "select c from Course as c where c not in (select e.course from Enrollment as e where e.student = :student)")
+})
 @Getter
 @Setter
 @NoArgsConstructor

@@ -50,15 +50,13 @@ public class EnrollmentBean {
         Integer studentId = Integer.parseInt(requestParameters.get("studentId"));
         student = studentDao.findById(studentId);
         enrollments = enrollmentDao.findByStudentId(studentId);
-        courses = courseDao.listAll();
+        courses = courseDao.listNotEnrolledByStudent(student);
     }
 
-    @Transactional
     public void deleteEnrollment(Enrollment enrollment) {
         enrollmentDao.delete(enrollment);
     }
 
-    @Transactional
     public void createEnrollment() {
         Course course = courseDao.findById(selectedCourseId);
 
