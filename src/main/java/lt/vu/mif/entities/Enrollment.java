@@ -10,7 +10,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 @Entity
-@NamedQueries({@NamedQuery(name = "Enrollment.findByStudentId", query = "select e from Enrollment as e where e.student.id = :studentId")})
+@NamedQueries({@NamedQuery(name = "Enrollment.findByStudentId", query = "select e from Enrollment as e where e.student.id = :studentId order by e.course.title")})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,6 +21,9 @@ public class Enrollment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Version
+    private Integer version;
 
     @Min(value = 1)
     @Max(value = 10)

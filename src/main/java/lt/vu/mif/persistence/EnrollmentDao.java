@@ -5,6 +5,7 @@ import lt.vu.mif.entities.Enrollment;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.OptimisticLockException;
 import java.util.List;
 
 @ApplicationScoped
@@ -16,20 +17,19 @@ public class EnrollmentDao {
         this.em.persist(enrollment);
     }
 
-    public Enrollment findById(Integer id) {
-        return em.find(Enrollment.class, id);
-    }
-
     public List<Enrollment> findByStudentId(Integer studentId) {
         return em.createNamedQuery("Enrollment.findByStudentId", Enrollment.class).setParameter("studentId", studentId).getResultList();
     }
 
-    public Enrollment update(Enrollment enrollment) {
-        return em.merge(enrollment);
-    }
-
     public void delete(Enrollment enrollment) {
         em.remove(enrollment);
+    }
+
+    public void update(Enrollment enrollment) throws InterruptedException {
+        Thread.sleep(5000);
+
+        em.merge(enrollment);
+        em.flush();
     }
 
 }

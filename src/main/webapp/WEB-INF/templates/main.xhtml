@@ -51,6 +51,15 @@
         </ui:insert>
     </header>
 
+    <div class="container pt-3">
+        <ui:repeat value="#{alertBean.alerts}" var="alert">
+            <div class="alert alert-#{alert.type.cssClass()} alert-dismissible fade show" role="alert">
+                #{alert.message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </ui:repeat>
+    </div>
+
     <main class="container py-4">
         <ui:insert name="content">
             Loading...
