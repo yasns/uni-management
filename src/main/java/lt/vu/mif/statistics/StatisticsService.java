@@ -2,6 +2,7 @@ package lt.vu.mif.statistics;
 
 import lt.vu.mif.entities.Enrollment;
 import lt.vu.mif.entities.Student;
+import lt.vu.mif.interceptor.TimedOperation;
 
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
@@ -32,12 +33,6 @@ public class StatisticsService {
 
     @Asynchronous
     public Future<StudentStats> calculateStats() {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-
         List<Student> students = em.createNamedQuery("Student.listAllWithEnrollments", Student.class).getResultList();
 
         int totalEnrollments = 0;

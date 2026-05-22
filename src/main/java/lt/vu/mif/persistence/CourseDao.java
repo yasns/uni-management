@@ -2,6 +2,7 @@ package lt.vu.mif.persistence;
 
 import lt.vu.mif.entities.Course;
 import lt.vu.mif.entities.Student;
+import lt.vu.mif.interceptor.TimedOperation;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -10,6 +11,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @ApplicationScoped
+@TimedOperation
 public class CourseDao {
     @Inject
     private EntityManager em;

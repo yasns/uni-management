@@ -3,4 +3,18 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/beans_2_0.xsd"
        bean-discovery-mode="all">
+
+    <alternatives>
+        <class>lt.vu.mif.statistics.SlowStatisticsService</class>
+        <class>lt.vu.mif.persistence.SlowEnrollmentDao</class>
+    </alternatives>
+
+    <interceptors>
+        <class>lt.vu.mif.interceptor.TimingInterceptor</class>
+    </interceptors>
+
+    <decorators>
+        <class>lt.vu.mif.persistence.CachingStudentDao</class>
+    </decorators>
+
 </beans>
