@@ -13,7 +13,8 @@ import java.util.List;
 @Entity
 @NamedQueries({
         @NamedQuery(name = "Student.listAll", query = "select s from Student as s"),
-        @NamedQuery(name = "Student.findByName", query = "select s from Student as s where lower(s.firstName) like :name or lower(s.lastName) like :name")
+        @NamedQuery(name = "Student.findByName", query = "select s from Student as s where lower(s.firstName) like :name or lower(s.lastName) like :name"),
+        @NamedQuery(name = "Student.listAllWithEnrollments", query = "select distinct s from Student s left join fetch s.enrollments e left join fetch e.course")
 })
 @Getter
 @Setter

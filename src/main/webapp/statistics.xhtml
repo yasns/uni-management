@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="/WEB-INF/templates/main.xhtml">
+
+    <ui:define name="title">Statistics</ui:define>
+
+    <ui:define name="content">
+        <h1 class="mb-4">Student Statistics</h1>
+
+        <h:form id="statsForm">
+
+            <h:commandButton id="calcBtn"
+                             value="Calculate Statistics"
+                             actionListener="#{statisticsBean.startCalculation}"
+                             styleClass="btn btn-primary mb-3"
+                             rendered="#{statisticsBean.status != 'RUNNING'}">
+                <f:ajax execute="@this" render="statsPanel"/>
+            </h:commandButton>
+
+            <!-- Clicked programmatically by JS during polling — never visible -->
+            <h:commandButton id="pollBtn"
+                             style="display:none"
+                             actionListener="#{statisticsBean.pollStatus}">
+                <f:ajax execute="@this" render="statsPanel"/>
+            </h:commandButton>
+
+            <h:panelGroup id="statsPanel" layout="block">
+
+                <h:panelGroup rendered="#{statisticsBean.status == 'RUNNING'}" layout="block">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Calculating...</span>
+                        </div>
+                        <span>Calculating statistics, please wait...</span>
+                    </div>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{statisticsBean.status == 'ERROR'}" layout="block">
+                    <div class="alert alert-danger">Calculation failed. Please try again.</div>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{statisticsBean.status == 'DONE'}" layout="block">
+                    <div class="card mb-3" style="max-width:420px">
+                        <div class="card-body">
+                            <h5 class="card-title">Results</h5>
+                            <dl class="row mb-0">
+                                <dt class="col-sm-8">Total Students</dt>
+                                <dd class="col-sm-4">#{statisticsBean.stats.totalStudents}</dd>
+
+                                <dt class="col-sm-8">Total Enrollments</dt>
+                                <dd class="col-sm-4">#{statisticsBean.stats.totalEnrollments}</dd>
+
+                                <dt class="col-sm-8">Average Grade</dt>
+                                <dd class="col-sm-4">
+                                    <h:outputText value="#{statisticsBean.stats.averageGrade}">
+                                        <f:convertNumber maxFractionDigits="2"/>
+                                    </h:outputText>
+                                </dd>
+
+                                <dt class="col-sm-8">Median Grade</dt>
+                                <dd class="col-sm-4">
+                                    <h:outputText value="#{statisticsBean.stats.medianGrade}">
+                                        <f:convertNumber maxFractionDigits="2"/>
+                                    </h:outputText>
+                                </dd>
+
+                                <dt class="col-sm-8">Students with Ungraded Enrollments</dt>
+                                <dd class="col-sm-4">#{statisticsBean.stats.studentsNoGrade}</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <h:commandButton value="Reset"
+                                     actionListener="#{statisticsBean.reset}"
+                                     styleClass="btn btn-secondary">
+                        <f:ajax execute="@this" render="statsPanel"/>
+                    </h:commandButton>
+                </h:panelGroup>
+
+                <!--
+                    Re-executes on every AJAX re-render so currentStatus is always fresh.
+                    Uses window._poll to ensure only one interval is active at a time.
+                -->
+                <script>
+                    (function () {
+                        var currentStatus = '#{statisticsBean.status}';
+                        if (window._poll) {
+                            clearInterval(window._poll);
+                            window._poll = null;
+                        }
+                        if (currentStatus === 'RUNNING') {
+                            window._poll = setInterval(function () {
+                                var btn = document.getElementById('statsForm:pollBtn');
+                                if (btn) btn.click();
+                            }, 2000);
+                        }
+                    })();
+                </script>
+
+            </h:panelGroup>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+</html>

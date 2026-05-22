@@ -68,9 +68,6 @@ public class EnrollmentBean {
         } catch (OptimisticLockException e) {
             optimisticLockConflict = true;
             return null;
-        } catch (InterruptedException e) {
-            System.err.println("Update was interrupted.");
-            return null;
         }
     }
 

@@ -27,8 +27,12 @@ public class EnrollmentDao {
     }
 
     @Transactional
-    public void update(Enrollment enrollment) throws InterruptedException {
-        Thread.sleep(5000);
+    public void update(Enrollment enrollment) {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
 
         em.merge(enrollment);
         em.flush();
