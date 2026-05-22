@@ -18,7 +18,7 @@ public class CachingStudentDao implements StudentRepository {
 
     @Override
     public List<Student> listAll() {
-        if (cache == null || cache.isEmpty()) {
+        if (cache == null) {
             System.out.println("[CACHE] miss, loading from DB");
             cache = delegate.listAll();
         } else {
